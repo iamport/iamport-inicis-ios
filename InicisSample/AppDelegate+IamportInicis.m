@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate+IamportInicis.h"
+#define MY_APP_URL_KEY  @"iamporttest"
 
 @implementation AppDelegate (IamportInicis)
 
@@ -14,6 +15,24 @@
 {
     //iOS6에서 세션끊어지는 상황 방지하기 위해 쿠키 설정. (iOS설정에서 사파리 쿠키 사용 설정도 필요)
     [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookieAcceptPolicy:NSHTTPCookieAcceptPolicyAlways];
+    
+    return YES;
+}
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+{
+    NSString* scheme = [url scheme];
+    NSString* query = [url query];
+    
+    if( scheme !=  nil && [scheme hasPrefix:MY_APP_URL_KEY] ) {
+        //imp_uid를 추출
+        NSDictionary* query_map = [self parseQueryString:query];
+        NSString* imp_uid = query_map[@"imp_uid"];
+        NSString* m_redirect_url = query_map[@"m_redirect_url"];
+        
+        NSLog(@"imp_uid is %@", imp_uid);
+        NSLog(@"m_redirect_url is %@", m_redirect_url);
+    }
     
     return YES;
 }
@@ -69,6 +88,20 @@
         NSString* URLString = @"https://itunes.apple.com/app/mobail-gyeolje-isp/id369125087?mt=8";
         NSURL* storeURL = [NSURL URLWithString:URLString]; [[UIApplication sharedApplication] openURL:storeURL];
     }
+}
+
+- (NSDictionary *)parseQueryString:(NSString *)query {
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithCapacity:6];
+    NSArray *pairs = [query componentsSeparatedByString:@"&"];
+    
+    for (NSString *pair in pairs) {
+        NSArray *elements = [pair componentsSeparatedByString:@"="];
+        NSString *key = [[elements objectAtIndex:0] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        NSString *val = [[elements objectAtIndex:1] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        
+        [dict setObject:val forKey:key];
+    }
+    return dict;
 }
 
 @end
