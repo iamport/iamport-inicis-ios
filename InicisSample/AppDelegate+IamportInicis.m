@@ -25,13 +25,23 @@
     NSString* query = [url query];
     
     if( scheme !=  nil && [scheme hasPrefix:MY_APP_URL_KEY] ) {
-        //imp_uid를 추출
+        query = [query stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        
+        //ISP 신용카드 인증 후 복귀하는 경우에는 query is nil. "appscheme://" 와 같이 URL Scheme만 정의된 상태로 호출됩니다. 
+        //실시간계좌이체, KPay인증/결제 후 복귀하는 경우에는 query is not nil. "appscheme://?imp_uid={imp_uid}&m_redirect_url={m_redirect_url}" 과 같이 query string이 포함되어 호출됩니다. 
+
+        //imp_uid 및 m_redirect_url을 추출
         NSDictionary* query_map = [self parseQueryString:query];
         NSString* imp_uid = query_map[@"imp_uid"];
         NSString* m_redirect_url = query_map[@"m_redirect_url"];
-        
-        NSLog(@"imp_uid is %@", imp_uid);
-        NSLog(@"m_redirect_url is %@", m_redirect_url);
+
+        if ( m_redirect_url != nil ) {
+            NSLog(@"imp_uid is %@", imp_uid);
+            NSLog(@"m_redirect_url is %@", m_redirect_url);
+
+            //(중요) 실시간계좌이체, KPay인증/결제 후 복귀하는 경우에는 위에서 추출한 m_redirect_url로 webView.loadUrl(m_redirect_url) 을 수행해야 페이지 이동이 이뤄지게 됩니다.
+            //webView.loadUrl(m_redirect_url);
+        }
     }
     
     return YES;
