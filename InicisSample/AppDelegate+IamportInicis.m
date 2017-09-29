@@ -33,10 +33,12 @@
         //imp_uid 및 m_redirect_url을 추출
         NSDictionary* query_map = [self parseQueryString:query];
         NSString* imp_uid = query_map[@"imp_uid"];
+        NSString* merchant_uid = query_map[@"merchant_uid"];
         NSString* m_redirect_url = query_map[@"m_redirect_url"];
 
         if ( m_redirect_url != nil ) {
             NSLog(@"imp_uid is %@", imp_uid);
+            NSLog(@"merchant_uid is %@", merchant_uid);
             NSLog(@"m_redirect_url is %@", m_redirect_url);
 
             //(중요) 실시간계좌이체, KPay인증/결제 후 복귀하는 경우에는 위에서 추출한 m_redirect_url로 webView.loadUrl(m_redirect_url) 을 수행해야 페이지 이동이 이뤄지게 됩니다.
