@@ -62,6 +62,7 @@
         <string>lpayapp</string> <!-- 롯데 L페이 -->
         <string>hanamopmoasign</string> <!-- 하나카드 공인인증앱 -->
         <string>wooripay</string> <!-- 우리페이 -->
+        <string>nhallonepayansimclick</string> <!-- NH 올원페이 -->
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
