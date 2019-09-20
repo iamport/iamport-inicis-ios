@@ -63,6 +63,7 @@
         <string>hanamopmoasign</string> <!-- 하나카드 공인인증앱 -->
         <string>wooripay</string> <!-- 우리페이 -->
         <string>nhallonepayansimclick</string> <!-- NH 올원페이 -->
+        <string>hanawalletmembers</string> <!-- 하나카드(하나멤버스 월렛) -->
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
